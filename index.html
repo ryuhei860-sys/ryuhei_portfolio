@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RYUHEI KAWAKAMI - MOVIE PORTFOLIO</title>
+    <style>
+        /* --- 全体設定 --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            color: #000;
+            background-color: #fff;
+            line-height: 1.8;
+            padding-bottom: 100px;
+        }
+
+        /* --- ヘッダー --- */
+        .header {
+            padding: 80px 10% 40px;
+        }
+        .header h1 {
+            font-size: clamp(3.5rem, 8vw, 6.5rem); 
+            font-weight: 900; 
+            line-height: 0.95; 
+            letter-spacing: 0.02em;
+        }
+        .header h1 span {
+            display: block; 
+        }
+        .header p {
+            font-size: 1.3rem;
+            margin-top: 25px;
+            letter-spacing: 0.2em;
+            font-weight: 600;
+            color: #444;
+        }
+
+        /* --- プロフィール セクション --- */
+        .profile-section {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background: url('profile.png') no-repeat center center/cover; 
+            background-color: #222; 
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 10%;
+        }
+        .profile-card {
+            background: rgba(0, 0, 0, 0.4); 
+            padding: 40px;
+            color: #fff;
+            max-width: 500px;
+            backdrop-filter: blur(5px);
+        }
+        .profile-card h2 {
+            font-size: 2.5rem;
+            letter-spacing: 0.1em;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .profile-card .en-name {
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 20px;
+        }
+        .profile-card p {
+            font-size: 0.85rem;
+            line-height: 2;
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+        .software-title {
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .software-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+        .software-icons img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            border-radius: 8px; 
+        }
+        .software-icons img[src="davinci.png"] {
+            transform: scale(1.15);
+            border-radius: 9px;
+        }
+
+        /* --- WORKS セクション --- */
+        .works-container {
+            max-width: 1200px;
+            margin: 100px auto 0;
+            padding: 0 5%;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            margin-bottom: 60px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .section-title::before {
+            content: "";
+            display: inline-block;
+            width: 40px;
+            height: 4px;
+            background-color: #000;
+        }
+
+        /* 各作品のブロック全体のコンテナ */
+        .work-item {
+            margin-bottom: 140px;
+        }
+
+        /* 作品タイトル（上辺を揃えるために独立化） */
+        .work-title {
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin-bottom: 25px;
+            letter-spacing: 0.05em;
+            width: 100%;
+        }
+
+        /* タイトルの下で、動画エリアと説明文を2カラム並列にする */
+        .work-body-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        /* 左側カラム：動画＋その下の機材などのエリア */
+        .work-left-area {
+            width: 100%;
+        }
+        
+        /* 動画枠（16:9） */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; 
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 25px; /* 下の機材情報との隙間 */
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 以前の自然なスタイルに戻した機材・ソフトウェア情報エリア */
+        .spec-area {
+            font-size: 0.85rem;
+        }
+        .spec-title {
+            font-size: 1.15rem;
+            font-weight: 900; 
+            color: #000;
+            letter-spacing: 0.08em;
+            margin-bottom: 8px;
+        }
+        .spec-details {
+            color: #555;
+            margin-bottom: 15px;
+        }
+        .spec-icons {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .spec-icons img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+        .spec-icons img[src="davinci.png"] {
+            transform: scale(1.15);
+            border-radius: 7px;
+        }
+
+        /* 右側カラム：説明テキストエリア群＋制作期間 */
+        .work-right-details {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+        
+        /* 見出し（太字） */
+        .info-block h4 {
+            font-size: 1.15rem;
+            font-weight: 900; 
+            color: #000;
+            margin-bottom: 6px;
+            letter-spacing: 0.08em; 
+        }
+        .info-block p, .info-block ul {
+            font-size: 0.85rem;
+            color: #333;
+            list-style: none;
+        }
+        .info-block ul li {
+            position: relative;
+            padding-left: 12px;
+        }
+        .info-block ul li::before {
+            content: "・";
+            position: absolute;
+            left: 0;
+        }
+
+        /* 蛍光ペン風のマーカー（ピンク下線） */
+        .marker {
+            background: linear-gradient(transparent 60%, #ffd3e2 60%);
+            font-weight: 700;
+        }
+
+        /* --- レスポンシブ（スマホ対応） --- */
+        @media (max-width: 768px) {
+            .header { padding: 50px 5% 30px; }
+            .profile-section { height: auto; padding: 40px 5%; justify-content: center; }
+            .profile-card { max-width: 100%; }
+            .work-body-grid { grid-template-columns: 1fr; gap: 40px; }
+            .work-item { margin-bottom: 80px; }
+            .video-wrapper { margin-bottom: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <h1>
+            <span>RYUHEI</span>
+            <span>KAWAKAMI</span>
+        </h1>
+        <p>MOVIE PORTFOLIO</p>
+    </header>
+
+    <!-- プロフィール -->
+    <section class="profile-section">
+        <div class="profile-card">
+            <h2>川上 隆平</h2>
+            <div class="en-name">RYUHEI KAWAKAMI</div>
+            <p>
+                デジタルハリウッド大学在学中。<br>
+                広告・プロモーション映像を中心に、企画立案から撮影、編集、カラーグレーディングまで一貫して制作しています。実写映像だけでなく、3DCGを活用したビジュアル制作にも取り組んでいます。大学でのチーム制作やクライアントワークを通じて、さまざまな制作フローを経験してきました。映像表現そのものだけでなく、「誰に、何を、どのように伝えるのか」を重視し、企画意図やターゲットに合わせた映像設計を心掛けています。
+            </p>
+            <div class="software-title">使用可能なソフトウェア</div>
+            <div class="software-icons">
+                <img src="premia.png" alt="Premiere Pro">
+                <img src="after.png" alt="After Effects">
+                <img src="photoshop.png" alt="Photoshop">
+                <img src="illustrator.png" alt="Illustrator">
+                <img src="davinci.png" alt="DaVinci Resolve">
+                <img src="blender.png" alt="Blender">
+                <img src="figma.png" alt="Figma">
+            </div>
+        </div>
+    </section>
+
+    <!-- WORKS セクション -->
+    <main class="works-container">
+        <h2 class="section-title">WORKS</h2>
+
+        <!-- 作品1: ROADSTAR -->
+        <div class="work-item">
+            <h3 class="work-title">ROADSTAR CINEMATIC MOVIE</h3>
+            
+            <div class="work-body-grid">
+                <!-- 左側：動画と機材（元の綺麗な並びに戻しました） -->
+                <div class="work-left-area">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/lM1zsFrLQPM?si=O5OMFk_XuJXSyD1b" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="spec-area">
+                        <div class="spec-title">機材・ソフトウェア</div>
+                        <div class="spec-details">Camera: Nikon Z6ii / Lens: z35mm f1.8 / Gimbal: DJI RS5</div>
+                        <div class="spec-icons">
+                            <img src="premia.png" alt="Premiere Pro">
+                            <img src="davinci.png" alt="DaVinci Resolve">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右側：文章＋制作期間 -->
+                <div class="work-right-details">
+                    <div class="info-block">
+                        <h4>作品概要</h4>
+                        <p>夜の街並みとROADSTARの美しいシルエットを活かし、<span class="marker">ブランドPV</span>を想定した映像作品として自主制作を行いました。</p>
+                    </div>
+                    <div class="info-block">
+                        <h4>作品の狙い</h4>
+                        <p>車そのものではなく、所有するライフスタイルの魅力を伝える。高級感と疾走感を両立した<span class="marker">広告映像</span>を目指しました。</p>
+                    </div>
+                    <div class="info-block">
+                        <h4>制作体制</h4>
+                        <p>企画・撮影・編集：川上隆平 / 人数：制作2人 出演2人</p>
+                    </div>
+                    <div class="info-block">
+                        <h4>工夫した点</h4>
+                        <ul>
+                            <li>撮影前にロケハンを実施し、車両が映えるスポットを選定</li>
+                            <li>広告映像を意識した<span class="marker">構図設計</span></li>
+                            <li>グレーディングによる<span class="marker">高級感の演出</span></li>
+                        </ul>
+                    </div>
+                    <div class="info-block">
+                        <h4>制作期間</h4>
+                        <p>ロケハン：1日 / 撮影：1日 / 編集：2日</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 作品2: DYMインターン -->
+        <div class="work-item">
+            <h3 class="work-title">株式会社DYM インターン制作</h3>
+            
+            <div class="work-body-grid">
+                <div class="work-left-area">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/SQaUi-kls4c?loop=1&playlist=SQaUi-kls4c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                    <div class="spec-area">
+                        <div class="spec-title">実績</div>
+                        <ul style="font-size: 0.85rem; color:#333; margin-bottom: 15px; list-style:inside disc;">
+                            <li>最高<span class="marker">3万回/1本</span>のインプレッション</li>
+                            <li><span class="marker">3ヶ月間で約150本以上</span>の動画制作</li>
+                            <li><span class="marker">撮影・構成・編集</span>を一貫して担当</li>
+                        </ul>
+                        <div class="spec-title">機材・ソフトウェア</div>
+                        <div class="spec-details">Camera: Nikon Z6ii / Lens: z35mm f1.8</div>
+                        <div class="spec-icons">
+                            <img src="premia.png" alt="Premiere Pro">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="work-right-details">
+                    <div class="info-block">
+                        <h4>作品概要</h4>
+                        <p>株式会社DYM様にて<span class="marker">長期インターン</span>を行っている際に制作した動画のひとつです。会社が運営する飲食店のモデル動画の「撮影」「台本作成」「動画編集」を一人で行いました。また、毎日投稿を実現するために、<span class="marker">3ヶ月間で約150本以上</span>の動画を制作しました。</p>
+                    </div>
+                    <div class="info-block">
+                        <h4>作品の狙い</h4>
+                        <p>8000円のビストロコースの訴求動画です。上司の提案する訴求方法に対して、最適な台本を考え、制作を行い、店舗の持つ高級感や料理の美しさを演出する工夫をしました。</p>
+                    </div>
+                    <div class="info-block">
+                        <h4>工夫した点</h4>
+                        <ul>
+                            <li>計画を立て、<span class="marker">ライティングやカメラワーク</span>での演出</li>
+                            <li><span class="marker">店舗の動画</span>として、適切かつ情報分析に沿った動画の制作</li>
+                            <li><span class="marker">安っぽい印象を与えない</span>動画のテンポや、テロップ</li>
+                        </ul>
+                    </div>
+                    <div class="info-block">
+                        <h4>制作期間</h4>
+                        <p>撮影：約3時間 / 制作：2〜3時間/1本</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 作品3: Canon eos kiss -->
+        <div class="work-item">
+            <h3 class="work-title">Canon eos kiss digital N PV風ムービー</h3>
+            
+            <div class="work-body-grid">
+                <div class="work-left-area">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/aRi0VBkUYDQ?si=4D9UUdMMoBvf8J7V" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="spec-area">
+                        <div class="spec-title">機材・ソフトウェア</div>
+                        <div class="spec-details">Camera: bmpcc4k / Lens: 25mm f1.8 / Gimbal: MOZA air2</div>
+                        <div class="spec-icons">
+                            <img src="premia.png" alt="Premiere Pro">
+                            <img src="davinci.png" alt="DaVinci Resolve">
+                            <img src="photoshop.png" alt="Photoshop">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="work-right-details">
+                    <div class="info-block">
+                        <h4>作品概要</h4>
+                        <p>個人所有の「eos kiss digital N」のプロモーション風ムービーの自主制作映像です。</p>
+                    </div>
+                    <div class="info-block">
+                        <h4>作品の狙い</h4>
+                        <p>一眼レフに対して難しい印象を持つ<span class="marker">初心者層に向け、気軽に写真を familial に楽しめる</span>カメラであることを伝えることを目的としました。</p>
+                    </div>
+                    <div class="info-block">
+                        <h4>制作体制</h4>
+                        <p>企画・出演・編集：川上隆平 / 人数：制作1人 撮影1人</p>
+                    </div>
+                    <div class="info-block">
+                        <h4>工夫した点</h4>
+                        <ul>
+                            <li>実際の写真を映像内で使う演出</li>
+                            <li>商品の「手軽さ」を意識した、<span class="marker">テンポの良いカット割</span></li>
+                            <li>広告映像を意識した、<span class="marker">動きのあるカメラワーク</span></li>
+                        </ul>
+                    </div>
+                    <div class="info-block">
+                        <h4>制作期間</h4>
+                        <p>撮影：1日 / 編集：2日</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 作品4: FEBB -->
+        <div class="work-item">
+            <h3 class="work-title">FEBB "THE SEASON" Deck</h3>
+            
+            <div class="work-body-grid">
+                <div class="work-left-area">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/xe4Oy71febo?loop=1&playlist=xe4Oy71febo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                    <div class="spec-area">
+                        <div class="spec-title">ソフトウェア</div>
+                        <div class="spec-details">3DCG Animation & Video Editing</div>
+                        <div class="spec-icons">
+                            <img src="premia.png" alt="Premiere Pro">
+                            <img src="after.png" alt="After Effects">
+                            <img src="blender.png" alt="Blender">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="work-right-details">
+                    <div class="info-block">
+                        <h4>作品概要</h4>
+                        <p>Diaspora skateboards様の新商品のPVです。個人でお仕事を頂き、制作しました。</p>
+                    </div>
+                    <div class="info-block">
+                        <h4>作品の狙い</h4>
+                        <p>商品の<span class="marker">質感やディテールを正確に伝え、購入意欲を高める</span>ことを目的とした。緩やかなモーションで商品の<span class="marker">ディテールや魅力</span>をつたえる。</p>
+                    </div>
+                    <div class="info-block">
+                        <h4>制作体制</h4>
+                        <p>動画構成・CG制作・編集：川上隆平 / 企画：Diaspora skateboards</p>
+                    </div>
+                    <div class="info-block">
+                        <h4>工夫した点</h4>
+                        <ul>
+                            <li><span class="marker">商品に忠実なCG制作</span>と演出</li>
+                            <li><span class="marker">商品をより魅せる</span>モーションやライティングの追求</li>
+                            <li>クライアントとの<span class="marker">綿密なコミュニケーション</span>による認識の共有</li>
+                        </ul>
+                    </div>
+                    <div class="info-block">
+                        <h4>制作期間</h4>
+                        <p>CG制作：2週間 / 映像制作：3日</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+</html>
