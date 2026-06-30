@@ -237,7 +237,15 @@
         /* --- レスポンシブ（スマホ対応） --- */
         @media (max-width: 768px) {
             .header { padding: 50px 5% 30px; }
-            .profile-section { height: auto; padding: 40px 5%; justify-content: center; }
+            
+            /* ✨ ここを以下のように書き換えます */
+            .profile-section { 
+                height: auto; 
+                padding: 40px 5%; 
+                justify-content: center; 
+                background-position: 23% center; /* 💡 画像の左から23%の位置を基準にする（顔を右側に寄せる） */
+            }
+            
             .profile-card { max-width: 100%; }
             .work-body-grid { grid-template-columns: 1fr; gap: 40px; }
             .work-item { margin-bottom: 80px; }
